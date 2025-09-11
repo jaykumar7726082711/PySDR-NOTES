@@ -5,10 +5,55 @@ As a concept it refers to using software to perform signal processing tasks that
 
 As a thing (e.g., “an SDR”) it typically refers to a device that you can plug an antenna into and receive RF signals, with the digitized RF samples being sent to a computer for processing or recording (e.g., over USB, Ethernet, PCI). Many SDRs also have transmit capabilities, allowing the computer to send samples to the SDR which then transmits the signal at a specified RF frequency. Some embedded-style SDRs include an onboard computer.
 
-Digital Signal Processing (DSP):
-The digital processing of signals; in our case, RF signals.
+### Digital Signal Processing (DSP):
+The digital processing of signals; in our case, RF signals.It is designed for someone who is:
+
+1. Interested in using SDRs to do cool stuff
+2. Good with Python
+3. Relatively new to DSP, wireless communications, and SDR
+4. A visual learner, preferring animations over equations
+5. Better at understanding equations after learning the concepts
+6. Looking for concise explanations, not a 1,000 page textbook
 # 2. Frequency Domain
 One of the coolest side effects of learning about DSP and wireless communications is that you will also learn to think in the frequency domain. Most people’s experience with working in the frequency domain is limited to adjusting the bass/mid/treble knobs on a car’s audio system. Most people’s experience with viewing something in the frequency domain is limited to seeing an audio equalizer, such as this clip:
+#### frequency domain really means, how to convert between time and frequency (plus what happens when we do so)
+![](https://pysdr.org/_images/time_and_freq_domain_example_signals.png)
+### Fourier Series
+The basics of the frequency domain start with understanding that any signal can be represented by sine waves summed together. When we break a signal down into its composite sine waves, we call it a Fourier series
+![](https://pysdr.org/_images/summing_sinusoids.svg)
+To understand how we can break down a signal into sine waves, or sinusoids, we need to first review the three attributes of a sine wave:
+
+1. Amplitude
+2. Frequency
+3. Phase
+#### Amplitude indicates the “strength” of the wave, while frequency is the number of waves per second. Phase is used to represent how the sine wave is shifted in time, anywhere from 0 to 360 degrees
+![](https://pysdr.org/_images/amplitude_phase_period.svg)
+### Time-Frequency Pairs
+We have established that signals can be represented as sine waves, which have several attributes. Now, let’s learn to plot signals in the frequency domain. While the time domain demonstrates how a signal changes over time, the frequency domain displays how much of a signal rests in which frequencies. Instead of the x-axis being time it will be frequency. 
+![](https://pysdr.org/_images/sine-wave.png)
+The time domain should look very familiar. It’s an oscillating functionThe.
+### Fourier Transform
+Mathematically, the “transform” we use to go from the time domain to the frequency domain and back is called the Fourier Transform. 
+### Fast Fourier Transform (FFT)
+ The Fast Fourier Transform (FFT) is simply an algorithm to compute the discrete Fourier Transform. It was developed decades ago, and even though there are variations on the implementation, it’s still the reigning leader for computing a discrete Fourier transform. 
+ ![](https://pysdr.org/_images/fft-block-diagram.svg)
+ The size of the output is always the same as the size of the input. If I feed 1,024 samples into the FFT, I will get 1,024 out. The confusing part is that the output will always be in the frequency domain, and thus the “span” of the x-axis if we were to plot it doesn’t change based on the number of samples in the time domain input. Let’s visualize that by looking at the input and output arrays, along with the units of their indices:
+![](https://pysdr.org/_images/fft-io.svg)
+Negative Frequencies
+What in the world is a negative frequency? For now, just know that they have to do with using complex numbers (imaginary numbers)–there isn’t really such thing as a “negative frequency” when it comes to transmitting/receiving RF signals, it’s just a representation we use.
+![](https://pysdr.org/_images/negative-frequencies2.svg)
+From a mathematical perspective, negative frequencies can be seen by looking at the complex exponential function, 
+. If we have a negative frequency, we can see that it will be a complex sinusoid that rotates in the opposite direction
+![](https://pysdr.org/_images/negative_freq_animation.gif)
+### Order in Time Doesn’t Matter
+Recall that an FFT is performed on many samples at once, i.e., you can’t observe the frequency domain of a single instance in time (one sample); it needs a span of time to operate on (many samples). The FFT function essentially “mixes around” the input signal to form the output, which has a different scale and units. We are no longer in the time domain after all. A good way to internalize this difference between domains is realizing that changing the order things happen in the time domain doesn’t change the frequency components in the signal.
+### FFT in Python
+Now that we have learned about what an FFT is and how the output is represented, let’s actually look at some Python code and use Numpy’s FFT function, np.fft.fft(). It is recommended that you use a full Python console/IDE on your computer, but in a pinch you can use the online web-based Python console linked at the bottom of the navigation bar on the left.
+   import numpy as np
+   t = np.arange(100)
+   s = np.sin(0.15*2*np.pi*t)
+
+First we need to create a signal in the time domain. Feel free to follow along with your own Python console. To keep things simple, we will make a simple sine wave at 0.15 Hz. We will also use a sample rate of 1 Hz, meaning in time we sample at 0, 1, 2, 3 seconds, etc.
 # 3. IQ Sampling
 ## Sampling Basics
 Before jumping into IQ sampling, let’s discuss what sampling actually means. You may have encountered sampling without realizing it by recording audio with a microphone. The microphone is a transducer that converts sound waves into an electric signal (a voltage level). That electric signal is transformed by an analog-to-digital converter (ADC), producing a digital representation of the sound wave. To simplify, the microphone captures sound waves that are converted into electricity, and that electricity in turn is converted into numbers. The ADC acts as the bridge between the analog and digital domains. SDRs are surprisingly similar. Instead of a microphone, however, they utilize an antenna, although they also use ADCs. In both cases, the voltage level is sampled with an ADC. For SDRs, think radio waves in then numbers out.
