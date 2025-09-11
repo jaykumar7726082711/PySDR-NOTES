@@ -87,7 +87,7 @@ The basic version of this algorithm works on power-of-two size FFTs, and is inte
 
 # 3. IQ Sampling
 ## Sampling Basics
-sampling is the form of sampling that an SDR performs, as well as many digital receivers (and transmitters). 
+iq sampling is the form of sampling that an SDR performs, as well as many digital receivers (and transmitters). IQ sampling, an in-phase and quadrature sampling technique, to measure the phase of incoming signals. In IQ sampling, the receiver mixes the incoming signal with the local oscillator (LO) at 0 and 90 degree offsets.
 <img width="829" height="356" alt="image" src="https://github.com/user-attachments/assets/ad01ab86-8276-4a21-a453-b5c450393562" />
 
 
