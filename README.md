@@ -63,7 +63,6 @@ Frequency Domain Analysis:
 FFT allows for the analysis of the frequency components present in a signal. This is useful for tasks such as signal denoising, spectral analysis, and identifying periodic patterns.
  <img width="2133" height="1330" alt="image" src="https://github.com/user-attachments/assets/93822545-e513-4987-bbc9-421cb6f1caf9" />
 ![](https://pysdr.org/_images/fft-python4.svg)
-![](S = np.fft.fftshift(np.fft.fft(s)))
 <img width="2118" height="1288" alt="image" src="https://github.com/user-attachments/assets/c8c8ed6e-0fd6-4d9c-9ea4-a2d40a666677" />
 First we need to create a signal in the time domain. Feel free to follow along with your own Python console. To keep things simple, we will make a simple sine wave at 0.15 Hz. We will also use a sample rate of 1 Hz, meaning in time we sample at 0, 1, 2, 3 seconds, etc.
 ### FFT Sizing
